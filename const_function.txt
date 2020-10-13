@@ -1,0 +1,26 @@
+Question: const before parameter vs const after function name c++
+What is the difference betweeen something like this
+
+friend Circle copy(const Circle &);
+and something like this
+
+friend Circle copy(Circle&) const;
+I know const after the function is used to tell the compiler that this function won't attempt to change the object it is called on, what about the other one?
+
+Answer:
+
+Circle copy(Circle&) const;
+makes the function const itself. This can only be used for member functions of a class/struct.
+
+Making a member function const means that
+
+it cannot call any non-const member functions
+it cannot change any member variables.
+it can be called by a const object(const objects can only call const functions). Non-const objects can also call a const function.
+It must be member function of the class 'Circle'.
+Now consider the next one:
+
+Circle copy(const Circle &);
+while this one means that the parameter passed cannot be changed within the function. It may or may not be a member function of the class.
+
+NOTE: It is possible to overload a function in such a way to have a const and non-const version of the same function.
