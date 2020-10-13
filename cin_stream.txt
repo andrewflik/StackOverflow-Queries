@@ -1,0 +1,43 @@
+Quesiton -: if (cin >> x) - Why can you use that condition?
+
+Ans -:
+
+std::cin is an instance of the std::istream class.
+
+cin >> x is just calling a function on the cin object. You can call the function directly:
+
+cin.operator >>(x);
+To allow you to read multiple variables at once the operator >> function returns a reference to the stream it was called on. You can call:
+
+cin >> x >> y;
+or equivalently:
+
+cin.operator >>(x).operator >>(y);
+or:
+
+std::istream& stream = cin.operator >>(x);
+stream.operator >>(y);
+The final part of the puzzle is that std::istream is convertible to bool. The bool is equivalent to calling !fail().
+
+So in the following code:
+
+int x;
+std::istream& stream = std::cin.operator >>(x);
+bool readOK = !stream.fail();
+if (readOK)
+{
+  std::cout << x << "\n";
+}
+bool readOK = !stream.fail(); can be reduced to just bool readOK = stream;.
+
+You don't need a separate bool to store the stream state so can just do if (stream).
+
+Removing the temporary stream variable gives if (std::cin.operator >>(x)).
+
+Using the operator directly gets us back to the original code:
+
+int x;
+if (std::cin >> x)
+{
+  std::cout << x << "\n";
+}
